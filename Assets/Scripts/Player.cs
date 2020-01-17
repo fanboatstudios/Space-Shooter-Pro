@@ -1,58 +1,57 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private float PlayerSpeed = 1f;
-    private float PlayerBoundsX = 11.27f;
-    private float PlayerBoundsUpperY = 0f;
-    private float PlayerBoundsLowerY = -3.8f;
+	[SerializeField]
+	private float PlayerSpeed = 1f;
+	private float PlayerBoundsX = 11.27f;
+	private float PlayerBoundsUpperY = 0f;
+	private float PlayerBoundsLowerY = -3.8f;
 
-    [SerializeField]
-    private GameObject laserPrefab;
-    [SerializeField]
-    private float destroyLawerAfter = 3f;
+	[SerializeField]
+	private GameObject laserPrefab;
+	[SerializeField]
+	private Vector3 laserPrefabOffset;
+	[SerializeField]
+	private float fireRate = 0.5f;
+	private float nextFire = 0.0f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        transform.position = new Vector3(0, 0, 0);
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		transform.position = new Vector3(0, 0, 0);
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        TranslateMovement();
-        FireLaser();
-    }
+	// Update is called once per frame
+	void Update()
+	{
+		TranslateMovement();
+		if (Input.GetKey(KeyCode.Space) && Time.time > nextFire && laserPrefab != null)
+		{
+			FireLaser();
+		}
+	}
 
-    private void TranslateMovement()
-    {
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
+	private void TranslateMovement()
+	{
+		var horizontalInput = Input.GetAxis("Horizontal");
+		var verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+		Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        if (Mathf.Abs(transform.position.x) > PlayerBoundsX)
-        {
-            transform.position = new Vector3(-1 * transform.position.x, transform.position.y, 0);
-        }
+		if (Mathf.Abs(transform.position.x) > PlayerBoundsX)
+		{
+			transform.position = new Vector3(-1 * transform.position.x, transform.position.y, 0);
+		}
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, PlayerBoundsLowerY, PlayerBoundsUpperY), 0);
+		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, PlayerBoundsLowerY, PlayerBoundsUpperY), 0);
 
-        transform.Translate(direction * Time.deltaTime * PlayerSpeed);
-    }
+		transform.Translate(direction * Time.deltaTime * PlayerSpeed);
+	}
 
-    private void FireLaser()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if(laserPrefab != null)
-            {
-                Destroy(Instantiate(laserPrefab, transform.position, Quaternion.identity), destroyLawerAfter);
-            }
-        }
-    }
+	private void FireLaser()
+	{
+		nextFire = Time.time + fireRate;
+		Instantiate(laserPrefab, transform.position + laserPrefabOffset, Quaternion.identity);
+	}
 }
