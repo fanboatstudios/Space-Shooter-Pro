@@ -10,6 +10,11 @@ public class Player : MonoBehaviour
     private float PlayerBoundsUpperY = 0f;
     private float PlayerBoundsLowerY = -3.8f;
 
+    [SerializeField]
+    private GameObject laserPrefab;
+    [SerializeField]
+    private float destroyLawerAfter = 3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +25,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         TranslateMovement();
+        FireLaser();
     }
 
     private void TranslateMovement()
@@ -37,5 +43,16 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, PlayerBoundsLowerY, PlayerBoundsUpperY), 0);
 
         transform.Translate(direction * Time.deltaTime * PlayerSpeed);
+    }
+
+    private void FireLaser()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if(laserPrefab != null)
+            {
+                Destroy(Instantiate(laserPrefab, transform.position, Quaternion.identity), destroyLawerAfter);
+            }
+        }
     }
 }
