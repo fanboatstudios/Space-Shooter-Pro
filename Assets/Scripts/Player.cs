@@ -1,28 +1,35 @@
 ﻿using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
 	[SerializeField]
-	private float PlayerSpeed = 1f;
-	private float PlayerBoundsX = 11.27f;
-	private float PlayerBoundsUpperY = 0f;
-	private float PlayerBoundsLowerY = -3.8f;
+	private float playerSpeed = 5.0f;
+	[SerializeField]
+	private float playerBoundsX = 11.27f;
+	[SerializeField]
+	private float playerBoundsUpperY = 0f;
+	[SerializeField]
+	private float playerBoundsLowerY = -3.8f;
+	[SerializeField]
+	private int playerLives = 3;
 
-	[SerializeField]
-	private GameObject laserPrefab;
-	[SerializeField]
-	private Vector3 laserPrefabOffset;
+	
 	[SerializeField]
 	private float fireRate = 0.5f;
 	private float nextFire = 0.0f;
 
-	// Start is called before the first frame update
+	
+	[SerializeField] 
+	private GameObject laserPrefab;
+	private Vector3 laserPrefabOffset = new Vector3(0, -3, 0);
+
+
 	void Start()
 	{
-		transform.position = new Vector3(0, 0, 0);
+		laserPrefabOffset = new Vector3(0, 0.8f, 0);
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
 		TranslateMovement();
@@ -39,19 +46,29 @@ public class Player : MonoBehaviour
 
 		Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-		if (Mathf.Abs(transform.position.x) > PlayerBoundsX)
+		if (Mathf.Abs(transform.position.x) > playerBoundsX)
 		{
 			transform.position = new Vector3(-1 * transform.position.x, transform.position.y, 0);
 		}
 
-		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, PlayerBoundsLowerY, PlayerBoundsUpperY), 0);
+		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, playerBoundsLowerY, playerBoundsUpperY), 0);
 
-		transform.Translate(direction * Time.deltaTime * PlayerSpeed);
+		transform.Translate(direction * Time.deltaTime * playerSpeed);
 	}
 
 	private void FireLaser()
 	{
 		nextFire = Time.time + fireRate;
 		Instantiate(laserPrefab, transform.position + laserPrefabOffset, Quaternion.identity);
+	}
+
+	public void TakeDamage()
+	{
+		playerLives--;
+
+		if(playerLives <= 0)
+		{
+			Destroy(gameObject);
+		}
 	}
 }
