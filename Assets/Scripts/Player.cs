@@ -14,14 +14,16 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private int playerLives = 3;
 
-	
+
 	[SerializeField]
-	private float fireRate = 0.5f;
+	private float fireRate = 0.15f;
 	private float nextFire = 0.0f;
 
-	
-	[SerializeField] 
+
+	[SerializeField]
+#pragma warning disable CS0649 
 	private GameObject laserPrefab;
+#pragma warning restore CS0649 
 	private Vector3 laserPrefabOffset = new Vector3(0, -3, 0);
 
 
@@ -66,7 +68,7 @@ public class Player : MonoBehaviour
 	{
 		playerLives--;
 
-		if(playerLives <= 0)
+		if (playerLives <= 0)
 		{
 			Destroy(gameObject);
 		}
