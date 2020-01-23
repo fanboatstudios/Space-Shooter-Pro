@@ -232,7 +232,7 @@ MonoBehaviour:
   playerBoundsUpperY: 0
   playerBoundsLowerY: -3.8
   playerLives: 3
-  fireRate: 0.25
+  fireRate: 0.15
   laserPrefab: {fileID: 5993040920987514648, guid: b24f6bdb8e4900947a920f80b8211990,
     type: 3}
 --- !u!1 &430174222
