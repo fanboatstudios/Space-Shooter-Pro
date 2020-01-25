@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe4cd8211b052b40aa3630f80c25c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRate: 4
+  spawnRate: 2
   enemyBoundsX: 9
   enemyPrefab: {fileID: 8474033860273354549, guid: 0269d2fd6f3c951419a4c690a43d28a6,
     type: 3}
