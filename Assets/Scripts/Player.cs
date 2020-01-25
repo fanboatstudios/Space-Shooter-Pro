@@ -3,33 +3,28 @@
 
 public class Player : MonoBehaviour
 {
-	[SerializeField]
-	private float playerSpeed = 5.0f;
-	[SerializeField]
-	private float playerBoundsX = 11.27f;
-	[SerializeField]
-	private float playerBoundsUpperY = 0f;
-	[SerializeField]
-	private float playerBoundsLowerY = -3.8f;
-	[SerializeField]
-	private int playerLives = 3;
+	[SerializeField] private float playerSpeed = 5.0f;
+	[SerializeField] private float playerBoundsX = 11.27f;
+	[SerializeField] private float playerBoundsUpperY = 0f;
+	[SerializeField] private float playerBoundsLowerY = -3.8f;
+	[SerializeField] private int playerLives = 3;
+	[SerializeField] private float fireRate = 0.15f;
+	[SerializeField] private GameObject laserPrefab;
+	[SerializeField] private Transform laserContainer;
 
-
-	[SerializeField]
-	private float fireRate = 0.15f;
-	private float nextFire = 0.0f;
-
-
-	[SerializeField]
-#pragma warning disable CS0649 
-	private GameObject laserPrefab;
-#pragma warning restore CS0649 
 	private Vector3 laserPrefabOffset = new Vector3(0, -3, 0);
-
+	private float nextFire = 0.0f;
+	private SpawnManager spawnManager;
 
 	void Start()
 	{
 		laserPrefabOffset = new Vector3(0, 0.8f, 0);
+		spawnManager = FindObjectOfType<SpawnManager>();
+
+		if(spawnManager == null)
+		{
+			Debug.LogError("SpawnManager was not found.");
+		}
 	}
 
 	void Update()
@@ -61,7 +56,7 @@ public class Player : MonoBehaviour
 	private void FireLaser()
 	{
 		nextFire = Time.time + fireRate;
-		Instantiate(laserPrefab, transform.position + laserPrefabOffset, Quaternion.identity);
+		Instantiate(laserPrefab, transform.position + laserPrefabOffset, Quaternion.identity, laserContainer);
 	}
 
 	public void TakeDamage()
@@ -70,6 +65,11 @@ public class Player : MonoBehaviour
 
 		if (playerLives <= 0)
 		{
+			if(spawnManager != null)
+			{
+				spawnManager.OnPlayerDeath();
+			}
+
 			Destroy(gameObject);
 		}
 	}
