@@ -11,14 +11,13 @@ public class Player : MonoBehaviour
 	[SerializeField] private float fireRate = 0.15f;
 	[SerializeField] private GameObject laserPrefab;
 	[SerializeField] private Transform laserContainer;
+	[SerializeField] private Vector3 laserPrefabOffset = new Vector3(0, -3f, 0);
 
-	private Vector3 laserPrefabOffset = new Vector3(0, -3, 0);
 	private float nextFire = 0.0f;
 	private SpawnManager spawnManager;
 
 	void Start()
 	{
-		laserPrefabOffset = new Vector3(0, 0.8f, 0);
 		spawnManager = FindObjectOfType<SpawnManager>();
 
 		if(spawnManager == null)
