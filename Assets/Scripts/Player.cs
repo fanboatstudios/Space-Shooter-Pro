@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 
 public class Player : MonoBehaviour
@@ -9,12 +10,13 @@ public class Player : MonoBehaviour
 	[SerializeField] private float playerBoundsLowerY = -3.8f;
 	[SerializeField] private int playerLives = 3;
 	[SerializeField] private float fireRate = 0.15f;
-	[SerializeField] private GameObject laserPrefab;
+	[SerializeField] private GameObject[] weaponPrefabs;
+	[SerializeField] private float powerUpWeaponCooldown = 5f;
 	[SerializeField] private Transform laserContainer;
-	[SerializeField] private Vector3 laserPrefabOffset = new Vector3(0, -3f, 0);
 
 	private float nextFire = 0.0f;
 	private SpawnManager spawnManager;
+	[SerializeField] private int activeWeaponIndex = 0;
 
 	void Start()
 	{
@@ -24,15 +26,17 @@ public class Player : MonoBehaviour
 		{
 			Debug.LogError("SpawnManager was not found.");
 		}
+
+		if (weaponPrefabs.Length == 0)
+		{
+			Debug.LogError("Weapon Prefabs array is empty.");
+		}
 	}
 
 	void Update()
 	{
 		TranslateMovement();
-		if (Input.GetKey(KeyCode.Space) && Time.time > nextFire && laserPrefab != null)
-		{
-			FireLaser();
-		}
+		CheckForFireWeapon();
 	}
 
 	private void TranslateMovement()
@@ -51,11 +55,19 @@ public class Player : MonoBehaviour
 
 		transform.Translate(direction * Time.deltaTime * playerSpeed);
 	}
-
-	private void FireLaser()
+	
+	private void CheckForFireWeapon()
+	{
+		if (Input.GetKey(KeyCode.Space) && Time.time > nextFire && weaponPrefabs[activeWeaponIndex] != null)
+		{
+			FireWeapon();
+		}
+	}
+	
+	private void FireWeapon()
 	{
 		nextFire = Time.time + fireRate;
-		Instantiate(laserPrefab, transform.position + laserPrefabOffset, Quaternion.identity, laserContainer);
+		Instantiate(weaponPrefabs[activeWeaponIndex], transform.position, Quaternion.identity, laserContainer);
 	}
 
 	public void TakeDamage()
@@ -71,5 +83,20 @@ public class Player : MonoBehaviour
 
 			Destroy(gameObject);
 		}
+	}
+
+	public void EnablePowerupWeapon(int weaponPrefabIndex)
+	{
+		if(weaponPrefabs[weaponPrefabIndex] != null)
+		{
+			activeWeaponIndex = weaponPrefabIndex;
+			StartCoroutine(PowerDownWeaponRoutine());
+		}
+	}
+
+	IEnumerator PowerDownWeaponRoutine()
+	{
+		yield return new WaitForSeconds(powerUpWeaponCooldown);
+		activeWeaponIndex = 0;
 	}
 }
