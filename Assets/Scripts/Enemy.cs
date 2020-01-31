@@ -29,7 +29,6 @@ public class Enemy : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collidedWith)
 	{
-		Debug.Log($"Collided with, {collidedWith.tag}");
 		if (collidedWith.CompareTag("Player"))
 		{
 			var player = collidedWith.gameObject.GetComponent<Player>();

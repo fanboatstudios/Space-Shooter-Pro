@@ -3,7 +3,8 @@
 public class Powerup : MonoBehaviour
 {
 	[SerializeField] private float speed = 2.5f;
-	[SerializeField] private int powerUpIndex = 1;
+	[SerializeField] private int powerUpWeaponIndex = 0;
+	[SerializeField] private PowerupType powerupType = PowerupType.None;
 	[SerializeField] private float destroyAtYValue = -7;
 
 	private void Update()
@@ -23,7 +24,21 @@ public class Powerup : MonoBehaviour
 			var player = collidedWith.GetComponent<Player>();
 			if(player != null)
 			{
-				player.EnablePowerupWeapon(powerUpIndex);
+				switch (powerupType)
+				{
+					case PowerupType.Tripleshot:
+						player.EnablePowerupWeapon(powerUpWeaponIndex);
+						break;
+					case PowerupType.Speed:
+						player.EnablePowerupSpeed();
+						break;
+					case PowerupType.Shield:
+						player.EnablePowerupShield();
+						break;
+					default:
+						break;
+
+				}
 				Destroy(gameObject);
 			}
 		}
