@@ -22,8 +22,13 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject shieldVisualizer;
 	[SerializeField] private bool shieldIsActive = false;
 
+	[SerializeField] private int score = 0;
+	private UIManager uiManager;
+
+
 	void Start()
 	{
+		uiManager = FindObjectOfType<UIManager>();
 		spawnManager = FindObjectOfType<SpawnManager>();
 
 		if(spawnManager == null)
@@ -43,6 +48,11 @@ public class Player : MonoBehaviour
 		else
 		{
 			shieldVisualizer.SetActive(false);
+		}
+
+		if(uiManager == null)
+		{
+			Debug.LogError("UIManger is NULL!");
 		}
 	}
 
@@ -136,5 +146,11 @@ public class Player : MonoBehaviour
 	{
 		shieldIsActive = true;
 		shieldVisualizer.SetActive(true);
+	}
+
+	public void AddScore(int points = 10)
+	{
+		score += points;
+		uiManager.UpdateScore(score);
 	}
 }

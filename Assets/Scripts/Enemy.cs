@@ -10,7 +10,20 @@ public class Enemy : MonoBehaviour
 	private float enemyBoundsUpperY = 6.5f;
 	[SerializeField]
 	private float enemyBoundsLowerY = -5.0f;
+	[SerializeField]
+	private int pointsAwarded = 10;
 
+	private Player player;
+
+	private void Start()
+	{
+		player = FindObjectOfType<Player>();
+
+		if(this.player == null)
+		{
+			Debug.LogError("Player is NULL!");
+		}
+	}
 
 	private void Update()
 	{
@@ -49,6 +62,9 @@ public class Enemy : MonoBehaviour
 			{
 				Destroy(collidedWith.gameObject);
 			}
+
+			player.AddScore(pointsAwarded);
+
 			Destroy(gameObject);
 		}
 	}
