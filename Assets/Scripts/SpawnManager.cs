@@ -13,6 +13,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float powerupSpawnRateLower = 5f;
     [SerializeField] private float powerupSpawnRateUpper = 10f;
     [SerializeField] private GameObject[] powerupPrefabs;
+    [SerializeField] private Transform powerupContainer;
 
     private Coroutine runningEnemyRoutine;
     private Coroutine runningPowerupRoutine;
@@ -35,6 +36,10 @@ public class SpawnManager : MonoBehaviour
         if(powerupPrefabs.Length <= 0)
         {
             Debug.LogError("Powerup Prefabs are not set.");
+        }
+        else if(powerupContainer == null)
+        {
+            Debug.LogError("Powerup Prefab container is NULL");
         }
         else
         {
@@ -61,7 +66,7 @@ public class SpawnManager : MonoBehaviour
             if (powerupPrefabs[powerupIndex] != null)
             {
                 var spawnPosition = new Vector3(Random.Range(-spawnBoundsX, spawnBoundsX), spawnBoundsY, 0);
-                Instantiate(powerupPrefabs[powerupIndex], spawnPosition, Quaternion.identity);
+                Instantiate(powerupPrefabs[powerupIndex], spawnPosition, Quaternion.identity, powerupContainer);
             }
             
             yield return new WaitForSeconds(Random.Range(powerupSpawnRateLower, powerupSpawnRateUpper));

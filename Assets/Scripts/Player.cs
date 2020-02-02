@@ -25,9 +25,11 @@ public class Player : MonoBehaviour
 	[SerializeField] private int score = 0;
 	private UIManager uiManager;
 
+	private GameManager gameManager;
 
 	void Start()
 	{
+		gameManager = FindObjectOfType<GameManager>();
 		uiManager = FindObjectOfType<UIManager>();
 		spawnManager = FindObjectOfType<SpawnManager>();
 
@@ -54,6 +56,13 @@ public class Player : MonoBehaviour
 		{
 			Debug.LogError("UIManger is NULL!");
 		}
+
+		if(gameManager == null)
+		{
+			Debug.LogError("GameManager is NULL!");
+		}
+
+		uiManager.UpdateLives(playerLives);
 	}
 
 	void Update()
@@ -103,12 +112,14 @@ public class Player : MonoBehaviour
 		}
 
 		playerLives--;
+		uiManager.UpdateLives(playerLives);
 
 		if (playerLives <= 0)
 		{
 			if(spawnManager != null)
 			{
 				spawnManager.OnPlayerDeath();
+				gameManager.GameOver();
 			}
 
 			Destroy(gameObject);
