@@ -16,13 +16,26 @@ public class GameManager : MonoBehaviour
         private set { isGameOver = value; }
     }
 
-	#endregion
+    #endregion
 
 	private Scene currentScene;
     private UIManager uiManager;
+    private SpawnManager spawnManager;
+
+    [SerializeField] private float reductionRate = .25f;
+    [SerializeField] private float spawnModificationRate = 20f;
+    private WaitForSeconds spawnModificationWaitTime;
 
     private void Awake()
     {
+        spawnModificationWaitTime = new WaitForSeconds(spawnModificationRate);
+
+        spawnManager = FindObjectOfType<SpawnManager>();
+        if(spawnManager == null)
+        {
+            Debug.LogError("SpawnManager is NULL");
+        }
+
         uiManager = FindObjectOfType<UIManager>();
         if(uiManager == null)
         {
@@ -62,5 +75,20 @@ public class GameManager : MonoBehaviour
     {
         IsGameOver = true;
         uiManager.EnableGameOver();
+    }
+
+    public void EnableSpawning()
+    {
+        spawnManager.EnableSpawning();
+        StartCoroutine(EnemySpawnRateModifierRoutine());
+    }
+
+    IEnumerator EnemySpawnRateModifierRoutine()
+    {
+        while (true)
+        {
+            yield return spawnModificationWaitTime;
+            spawnManager.ReduceEnemySpawnRateBy(reductionRate);
+        }
     }
 }
