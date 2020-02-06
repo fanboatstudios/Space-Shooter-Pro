@@ -27,8 +27,14 @@ public class Player : MonoBehaviour
 
 	private GameManager gameManager;
 
+	// Engine Animations
+	private Engine rightEngine, leftEngine;
+
 	void Start()
 	{
+		rightEngine = transform.GetChild(2).gameObject.GetComponent<Engine>();
+		leftEngine = transform.GetChild(3).gameObject.GetComponent<Engine>();
+
 		gameManager = FindObjectOfType<GameManager>();
 		uiManager = FindObjectOfType<UIManager>();
 		spawnManager = FindObjectOfType<SpawnManager>();
@@ -62,7 +68,13 @@ public class Player : MonoBehaviour
 			Debug.LogError("GameManager is NULL!");
 		}
 
+		if(rightEngine == null | leftEngine == null)
+		{
+			Debug.LogError("1 or more engines are NULL");
+		}
+
 		uiManager.UpdateLives(playerLives);
+		
 	}
 
 	void Update()
@@ -114,15 +126,23 @@ public class Player : MonoBehaviour
 		playerLives--;
 		uiManager.UpdateLives(playerLives);
 
-		if (playerLives <= 0)
+		switch (playerLives)
 		{
-			if(spawnManager != null)
-			{
-				spawnManager.OnPlayerDeath();
-				gameManager.GameOver();
-			}
+			case 2:
+				rightEngine.Enabled = true;
+				break;
+			case 1:
+				leftEngine.Enabled = true;
+				break;
+			default:
+				if (spawnManager != null)
+				{
+					spawnManager.OnPlayerDeath();
+					gameManager.GameOver();
+				}
 
-			Destroy(gameObject);
+				Destroy(gameObject);
+				break;
 		}
 	}
 
@@ -164,4 +184,6 @@ public class Player : MonoBehaviour
 		score += points;
 		uiManager.UpdateScore(score);
 	}
+
+
 }
