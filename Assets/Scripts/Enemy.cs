@@ -14,11 +14,22 @@ public class Enemy : MonoBehaviour
 	private int pointsAwarded = 10;
 
 	private Player player;
+	[SerializeField] private Explosion explosion;
 	private Animator enemyAnimator;
 	private CircleCollider2D circleCollider2D;
 
 	private void Awake()
 	{
+		explosion = GetComponent<Explosion>();
+		if (explosion == null)
+		{
+			Debug.LogError("Explosion is NULL");
+		}
+		else
+		{
+			explosion.enabled = false;
+		}
+
 		circleCollider2D = GetComponent<CircleCollider2D>();
 		if(circleCollider2D == null)
 		{
@@ -91,6 +102,7 @@ public class Enemy : MonoBehaviour
 	{
 		enemyAnimator.SetTrigger("OnEnemyDeath");
 		circleCollider2D.enabled = false;
+		explosion.enabled = true;
 		Destroy(gameObject, 2.8f);
 	}
 

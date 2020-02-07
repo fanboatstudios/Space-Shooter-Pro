@@ -14,27 +14,31 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject[] weaponPrefabs;
 	[SerializeField] private float powerUpCooldown = 5f;
 	[SerializeField] private Transform laserContainer;
-
+	private WaitForSeconds coolDownWait;
 	private float nextFire = 0.0f;
 	private SpawnManager spawnManager;
 	[SerializeField] private int activeWeaponIndex = 0;
-
+	[SerializeField] private Explosion explosion;
 	[SerializeField] private GameObject shieldVisualizer;
 	[SerializeField] private bool shieldIsActive = false;
 
 	[SerializeField] private int score = 0;
 	private UIManager uiManager;
-
 	private GameManager gameManager;
 
 	// Engine Animations
 	private Engine rightEngine, leftEngine;
 
+	// Sound FX
+	[SerializeField] private AudioClip laserClip;
+
 	void Start()
 	{
+		coolDownWait = new WaitForSeconds(powerUpCooldown);
+		explosion = GetComponent<Explosion>();
 		rightEngine = transform.GetChild(2).gameObject.GetComponent<Engine>();
 		leftEngine = transform.GetChild(3).gameObject.GetComponent<Engine>();
-
+		
 		gameManager = FindObjectOfType<GameManager>();
 		uiManager = FindObjectOfType<UIManager>();
 		spawnManager = FindObjectOfType<SpawnManager>();
@@ -73,8 +77,16 @@ public class Player : MonoBehaviour
 			Debug.LogError("1 or more engines are NULL");
 		}
 
+		if(explosion == null)
+		{
+			Debug.LogError("Explosion is NULL");
+		}
+		else
+		{
+			explosion.enabled = false;
+		}
+
 		uiManager.UpdateLives(playerLives);
-		
 	}
 
 	void Update()
@@ -112,6 +124,7 @@ public class Player : MonoBehaviour
 	{
 		nextFire = Time.time + fireRate;
 		Instantiate(weaponPrefabs[activeWeaponIndex], transform.position, Quaternion.identity, laserContainer);
+		AudioSource.PlayClipAtPoint(laserClip, transform.position);
 	}
 
 	public void TakeDamage()
@@ -141,7 +154,8 @@ public class Player : MonoBehaviour
 					gameManager.GameOver();
 				}
 
-				Destroy(gameObject);
+				explosion.enabled = true;
+				Destroy(gameObject, 0.1f);
 				break;
 		}
 	}
@@ -163,13 +177,13 @@ public class Player : MonoBehaviour
 
 	IEnumerator PowerDownWeaponRoutine()
 	{
-		yield return new WaitForSeconds(powerUpCooldown);
+		yield return coolDownWait;
 		activeWeaponIndex = 0;
 	}
 
 	IEnumerator PowerDownSpeedRoutine()
 	{
-		yield return new WaitForSeconds(powerUpCooldown);
+		yield return coolDownWait;
 		playerSpeed /= speedBoostMultiplier;
 	}
 

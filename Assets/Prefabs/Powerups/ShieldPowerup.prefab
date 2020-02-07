@@ -138,6 +138,7 @@ MonoBehaviour:
   powerUpWeaponIndex: 0
   powerupType: 3
   destroyAtYValue: -7
+  powerupClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!95 &5148853946958083773
 Animator:
   serializedVersion: 3

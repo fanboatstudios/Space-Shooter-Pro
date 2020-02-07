@@ -6,7 +6,7 @@ public class Powerup : MonoBehaviour
 	[SerializeField] private int powerUpWeaponIndex = 0;
 	[SerializeField] private PowerupType powerupType = PowerupType.None;
 	[SerializeField] private float destroyAtYValue = -7;
-
+	[SerializeField] private AudioClip powerupClip;
 	private void Update()
 	{
 		transform.Translate(Vector3.down * Time.deltaTime * speed);
@@ -22,6 +22,10 @@ public class Powerup : MonoBehaviour
 		if (collidedWith.CompareTag("Player"))
 		{
 			var player = collidedWith.GetComponent<Player>();
+
+			if (powerupClip != null)
+				AudioSource.PlayClipAtPoint(powerupClip, transform.position);
+
 			if(player != null)
 			{
 				switch (powerupType)
