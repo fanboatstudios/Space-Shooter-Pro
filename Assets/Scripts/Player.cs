@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
 	// Sound FX
 	[SerializeField] private AudioClip laserClip;
+	[SerializeField] private AudioClip hitClip;
 
 	void Start()
 	{
@@ -84,6 +85,11 @@ public class Player : MonoBehaviour
 		else
 		{
 			explosion.enabled = false;
+		}
+
+		if(hitClip == null)
+		{
+			Debug.LogError("Hit Clip is NULL");
 		}
 
 		uiManager.UpdateLives(playerLives);
@@ -143,9 +149,11 @@ public class Player : MonoBehaviour
 		{
 			case 2:
 				rightEngine.Enabled = true;
+				AudioSource.PlayClipAtPoint(hitClip, transform.position);
 				break;
 			case 1:
 				leftEngine.Enabled = true;
+				AudioSource.PlayClipAtPoint(hitClip, transform.position);
 				break;
 			default:
 				if (spawnManager != null)
@@ -199,5 +207,11 @@ public class Player : MonoBehaviour
 		uiManager.UpdateScore(score);
 	}
 
-
+	private void OnTriggerEnter2D(Collider2D colliedWith)
+	{
+		if (colliedWith.CompareTag("EnemyLaser"))
+		{
+			TakeDamage();
+		}
+	}
 }

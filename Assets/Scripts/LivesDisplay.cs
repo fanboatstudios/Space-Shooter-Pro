@@ -27,6 +27,7 @@ public class LivesDisplay : MonoBehaviour
 
     public void UpdateLives(int livesRemaning)
     {
+        if (livesRemaning < 0) livesRemaning = 0;
         if(livesSprites[livesRemaning] != null)
         {
             livesDisplay.sprite = livesSprites[livesRemaning];

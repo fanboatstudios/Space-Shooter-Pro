@@ -141,6 +141,10 @@ MonoBehaviour:
   enemyBoundsLowerY: -5
   pointsAwarded: 10
   explosion: {fileID: 0}
+  laserPrefab: {fileID: 3313090871191311166, guid: 7c05afc74efda5c418764898e4024e58,
+    type: 3}
+  laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  fireRate: 5
 --- !u!95 &8423642730141088473
 Animator:
   serializedVersion: 3

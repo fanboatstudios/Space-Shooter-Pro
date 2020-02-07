@@ -17,6 +17,10 @@ public class Enemy : MonoBehaviour
 	[SerializeField] private Explosion explosion;
 	private Animator enemyAnimator;
 	private CircleCollider2D circleCollider2D;
+	[SerializeField] private GameObject laserPrefab;
+	[SerializeField] private AudioClip laserClip;
+	private float fireRate;
+	private float nextFire = 0.0f;
 
 	private void Awake()
 	{
@@ -51,12 +55,35 @@ public class Enemy : MonoBehaviour
 		{
 			Debug.LogError("Player is NULL!");
 		}
+
+		if(laserPrefab == null)
+		{
+			Debug.LogError("Laser Prefab is NULL");
+		}
+
+		if(laserClip == null)
+		{
+			Debug.LogError("Laser Audio Clip is NULL");
+		}
+
 	}
 
 	private void Update()
 	{
 		TranslateMovement();
+		FireWeapon();
 	}
+
+	private void FireWeapon()
+	{
+		if (Time.time > nextFire)
+		{
+			nextFire = Time.time + Random.Range(3f,7f);
+			Instantiate(laserPrefab, transform.position, Quaternion.identity, transform);
+			AudioSource.PlayClipAtPoint(laserClip, transform.position);
+		}
+	}
+
 
 	private void TranslateMovement()
 	{
