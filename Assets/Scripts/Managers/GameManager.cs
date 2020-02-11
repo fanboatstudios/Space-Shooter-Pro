@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
 	#region IsGameOver property
 
@@ -19,28 +19,16 @@ public class GameManager : MonoBehaviour
     #endregion
 
 	private Scene currentScene;
-    private UIManager uiManager;
-    private SpawnManager spawnManager;
 
     [SerializeField] private float reductionRate = .25f;
     [SerializeField] private float spawnModificationRate = 20f;
     private WaitForSeconds spawnModificationWaitTime;
 
-    private void Awake()
+    public override void Init()
     {
+        base.Init();
+
         spawnModificationWaitTime = new WaitForSeconds(spawnModificationRate);
-
-        spawnManager = FindObjectOfType<SpawnManager>();
-        if(spawnManager == null)
-        {
-            Debug.LogError("SpawnManager is NULL");
-        }
-
-        uiManager = FindObjectOfType<UIManager>();
-        if(uiManager == null)
-        {
-            Debug.LogError("UIManager is NULL!");
-        }
 
         currentScene = SceneManager.GetActiveScene();
         if (!currentScene.IsValid())
@@ -74,12 +62,12 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         IsGameOver = true;
-        uiManager.EnableGameOver();
+        UIManager.Instance.EnableGameOver();
     }
 
     public void EnableSpawning()
     {
-        spawnManager.EnableSpawning();
+        SpawnManager.Instance.EnableSpawning();
         StartCoroutine(EnemySpawnRateModifierRoutine());
     }
 
@@ -88,7 +76,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return spawnModificationWaitTime;
-            spawnManager.ReduceEnemySpawnRateBy(reductionRate);
+            SpawnManager.Instance.ReduceEnemySpawnRateBy(reductionRate);
         }
     }
 }

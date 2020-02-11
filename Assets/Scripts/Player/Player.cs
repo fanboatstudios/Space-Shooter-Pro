@@ -16,15 +16,12 @@ public class Player : MonoBehaviour
 	[SerializeField] private Transform laserContainer;
 	private WaitForSeconds coolDownWait;
 	private float nextFire = 0.0f;
-	private SpawnManager spawnManager;
 	[SerializeField] private int activeWeaponIndex = 0;
 	[SerializeField] private Explosion explosion;
 	[SerializeField] private GameObject shieldVisualizer;
 	[SerializeField] private bool shieldIsActive = false;
 
 	[SerializeField] private int score = 0;
-	private UIManager uiManager;
-	private GameManager gameManager;
 
 	// Engine Animations
 	private Engine rightEngine, leftEngine;
@@ -39,15 +36,6 @@ public class Player : MonoBehaviour
 		explosion = GetComponent<Explosion>();
 		rightEngine = transform.GetChild(2).gameObject.GetComponent<Engine>();
 		leftEngine = transform.GetChild(3).gameObject.GetComponent<Engine>();
-		
-		gameManager = FindObjectOfType<GameManager>();
-		uiManager = FindObjectOfType<UIManager>();
-		spawnManager = FindObjectOfType<SpawnManager>();
-
-		if(spawnManager == null)
-		{
-			Debug.LogError("SpawnManager was not found.");
-		}
 
 		if (weaponPrefabs.Length == 0)
 		{
@@ -62,17 +50,7 @@ public class Player : MonoBehaviour
 		{
 			shieldVisualizer.SetActive(false);
 		}
-
-		if(uiManager == null)
-		{
-			Debug.LogError("UIManger is NULL!");
-		}
-
-		if(gameManager == null)
-		{
-			Debug.LogError("GameManager is NULL!");
-		}
-
+		
 		if(rightEngine == null | leftEngine == null)
 		{
 			Debug.LogError("1 or more engines are NULL");
@@ -92,7 +70,7 @@ public class Player : MonoBehaviour
 			Debug.LogError("Hit Clip is NULL");
 		}
 
-		uiManager.UpdateLives(playerLives);
+		UIManager.Instance.UpdateLives(playerLives);
 	}
 
 	void Update()
@@ -143,7 +121,7 @@ public class Player : MonoBehaviour
 		}
 
 		playerLives--;
-		uiManager.UpdateLives(playerLives);
+		UIManager.Instance.UpdateLives(playerLives);
 
 		switch (playerLives)
 		{
@@ -156,12 +134,8 @@ public class Player : MonoBehaviour
 				AudioSource.PlayClipAtPoint(hitClip, transform.position);
 				break;
 			default:
-				if (spawnManager != null)
-				{
-					spawnManager.OnPlayerDeath();
-					gameManager.GameOver();
-				}
-
+				SpawnManager.Instance.OnPlayerDeath();
+				GameManager.Instance.GameOver();
 				explosion.enabled = true;
 				Destroy(gameObject, 0.1f);
 				break;
@@ -204,7 +178,7 @@ public class Player : MonoBehaviour
 	public void AddScore(int points = 10)
 	{
 		score += points;
-		uiManager.UpdateScore(score);
+		UIManager.Instance.UpdateScore(score);
 	}
 
 	private void OnTriggerEnter2D(Collider2D colliedWith)

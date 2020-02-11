@@ -6,16 +6,11 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour
 {
     [SerializeField] float rotationSpeed = 3.0f;
-    [SerializeField] GameManager gameManager;
     [SerializeField] GameObject explosionPrefab;
     
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-        if(gameManager == null)
-        {
-            Debug.LogError("GameManager is NULL!");
-        }
+
         
         if(explosionPrefab == null)
         {
@@ -55,6 +50,6 @@ public class Asteroid : MonoBehaviour
 
         Destroy(gameObject, .4f);
 
-        gameManager.EnableSpawning();
+        GameManager.Instance.EnableSpawning();
     }
 }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoSingleton<UIManager>
 {
-    [SerializeField] private Text scoreText;
+    [SerializeField] private Text scoreText = null;
     private LivesDisplay livesDisplay;
     private GameOver gameOverText;
     
-    private void Awake()
+    public override void Init()
     { 
         gameOverText = FindObjectOfType<GameOver>();
         if(gameOverText == null)

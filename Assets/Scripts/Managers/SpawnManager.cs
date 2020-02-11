@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class SpawnManager : MonoBehaviour
+public class SpawnManager : MonoSingleton<SpawnManager>
 {
     [SerializeField] private float spawnBoundsX = 9f;
     [SerializeField] private float spawnBoundsY = 7f;
