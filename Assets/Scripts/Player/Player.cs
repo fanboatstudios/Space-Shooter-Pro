@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 
 public class Player : MonoBehaviour
 {
 	[SerializeField] private float playerSpeed = 5.0f;
-	[SerializeField] private float speedBoostMultiplier = 1.5f;
+	[SerializeField] private float speedBoostMultiplier = 1.25f;
+	[SerializeField] private float thrustMulitplier = 1.75f;
 	[SerializeField] private float playerBoundsX = 11.27f;
 	[SerializeField] private float playerBoundsUpperY = 0f;
 	[SerializeField] private float playerBoundsLowerY = -3.8f;
@@ -75,8 +77,27 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		CheckForThruster();
 		TranslateMovement();
 		CheckForFireWeapon();
+	}
+
+	private void CheckForThruster()
+	{
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			if(thrustMulitplier > 1f)
+			{
+				playerSpeed *= thrustMulitplier;
+			}
+		}
+		else if(Input.GetKeyUp(KeyCode.LeftShift))
+		{
+			if (thrustMulitplier > 1f)
+			{
+				playerSpeed /= thrustMulitplier;
+			}
+		}
 	}
 
 	private void TranslateMovement()

@@ -572,7 +572,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 6
-  speedBoostMultiplier: 1.5
+  speedBoostMultiplier: 1.25
+  thrustMulitplier: 1.5
   playerBoundsX: 10.6
   playerBoundsUpperY: 0
   playerBoundsLowerY: -4
