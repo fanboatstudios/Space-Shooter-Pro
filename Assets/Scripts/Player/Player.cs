@@ -139,8 +139,18 @@ public class Player : MonoBehaviour
 	{
 		if (shieldIsActive)
 		{
-			shieldVisualizer.SetActive(false);
-			shieldIsActive = false;
+			var shield = shieldVisualizer.GetComponent<Shield>();
+			if (shield != null && shield.Hits > 0)
+			{
+				shield.Damage(1);
+				shieldVisualizer.SetActive(true);
+				shieldIsActive = true;
+			}
+			else
+			{
+				shieldVisualizer.SetActive(false);
+				shieldIsActive = false;
+			}
 			return;
 		}
 
@@ -212,4 +222,5 @@ public class Player : MonoBehaviour
 			TakeDamage();
 		}
 	}
+
 }

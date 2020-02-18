@@ -342,7 +342,7 @@ Transform:
   m_LocalScale: {x: 0.24207558, y: 0.24207558, z: 0.24207558}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &189428568
 GameObject:
@@ -1644,6 +1644,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 921377595}
+  - component: {fileID: 921377598}
   - component: {fileID: 921377597}
   - component: {fileID: 921377596}
   m_Layer: 0
@@ -1736,6 +1737,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &921377598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921377594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e2534d9caa8b947aaf2d7ab2b36bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldVisualization: {fileID: 0}
+  damageVisualization:
+  - {r: 0.4156863, g: 0.85098046, b: 1, a: 0.25882354}
+  - {r: 0.4156863, g: 0.85098046, b: 1, a: 0.627451}
+  - {r: 0.4156863, g: 0.85098046, b: 1, a: 1}
+  hits: 3
 --- !u!1 &972335574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2504,7 +2523,7 @@ PrefabInstance:
     - target: {fileID: 8972272471337096906, guid: a4d7048f384b1de41afc655c6a7774f0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8972272471337096906, guid: a4d7048f384b1de41afc655c6a7774f0,
         type: 3}
