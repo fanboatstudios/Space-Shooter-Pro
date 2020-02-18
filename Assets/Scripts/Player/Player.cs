@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
 {
 	[SerializeField] private float playerSpeed = 5.0f;
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private Explosion explosion;
 	[SerializeField] private GameObject shieldVisualizer;
 	[SerializeField] private bool shieldIsActive = false;
-
+	[SerializeField] private Animator animator;
 	[SerializeField] private int score = 0;
 
 	// Engine Animations
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+		animator = GetComponent<Animator>();
 		coolDownWait = new WaitForSeconds(powerUpCooldown);
 		explosion = GetComponent<Explosion>();
 		rightEngine = transform.GetChild(2).gameObject.GetComponent<Engine>();
@@ -111,6 +112,8 @@ public class Player : MonoBehaviour
 		{
 			transform.position = new Vector3(-1 * transform.position.x, transform.position.y, 0);
 		}
+
+		animator.SetInteger("Turning", (int) horizontalInput);
 
 		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, playerBoundsLowerY, playerBoundsUpperY), 0);
 
